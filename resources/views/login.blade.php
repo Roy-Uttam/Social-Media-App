@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <div class="col-sm-3 text-center" >
-                        <a type="submit" href="{{ route('home') }}" class="btn btn-primary">Signup</a>
+                        <a type="submit" href="{{ route('register') }}" class="btn btn-primary">Signup</a>
                     </div>
                 </div>
             </div>
@@ -47,18 +47,37 @@
                     </div>
                     <div class="pull-right col-sm-6 text-center">
                         <div class="login-form">
+                            <!-- Session Status -->
+                            <x-auth-session-status class="mb-4" :status="session('status')" />
+
+                            <!-- Validation Errors -->
+                            <x-auth-validation-errors class="mb-4" :errors="$errors" />
+
                             <p class="h3">Log in to FaceBook</p>
-                            <form action="javascript:void(0);" method="post" style="max-width:400px;margin:0px auto;">
+
+                            <form action="{{ route('savelogin') }}" method="post" style="max-width:400px;margin:0px auto;">
+                                @csrf
+
                                 <div class="form-group">
-                                    <input type="text" name="user_email" placeholder="Email Address" class="input-lg col-sm-12"/>
+                                    <input class="input-lg col-sm-12" type="text" name="email" placeholder="Email Address" value="{{old('email')}}" required />
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" placeholder="New Password" name="pwd" class="input-lg col-sm-12"/>
+                                    <input class="input-lg col-sm-12" type="password" placeholder="New Password" name="password" required />
                                 </div>
+                                
                                 <div class="form-group">
                                     <input type="submit" value="Login" class="btn btn-primary input-lg col-sm-12"/>
+                                </div>
+
+                                <div class="form-group">
+                                    
+                                     <label for="remember_me" class="inline-flex items-center">
+                                        <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="remember">
+                                        <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+                                    </label>
+                                </div>
                                     <br/><br/><br/><br/>
-                                    <a href="{{ route('home') }}">Signup for FaceBook</a>
+                                    <a href="{{ route('register') }}">Signup for FaceBook</a>
                                 </div>
                             </form>
                         </div>
