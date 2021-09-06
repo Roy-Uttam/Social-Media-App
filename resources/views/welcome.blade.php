@@ -34,6 +34,7 @@
                         <div class="inline-form pull-right">
                             <form method="POST" action="{{ route('savelogin') }}">
                                 @csrf
+
                                 <input type="text" name="email" placeholder="Email Address"/>
                                 <input type="password" name="password" placeholder="Password"/>
                                 <input type="submit" value="Login" class="btn btn-primary"/>

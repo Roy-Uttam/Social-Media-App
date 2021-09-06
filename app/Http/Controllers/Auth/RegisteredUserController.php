@@ -57,7 +57,11 @@ class RegisteredUserController extends Controller
         $userinfo['b_day'] = $birthday;
 
 
-        User::insert($userinfo);
+        $user = User::create($userinfo);
+
+        Auth::loginUsingId($user->id);
+
+        return redirect()->route('dashboard');
         // $user = User::insert($userinfo);
 
         // event(new Registered($user));
