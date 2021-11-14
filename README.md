@@ -8,6 +8,24 @@
 </p>
 
 ## 
-php artisan serve
+FaceBook clone
 
+## features:
+
+Sign Up
+Sign In
+Sign out
+newsfeed
+profile
+like
+comment
+Active users
+
+## Installation:
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+php artisan serve
 
