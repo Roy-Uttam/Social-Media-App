@@ -1,3 +1,14 @@
+@php
+    
+
+    $last_login = \App\Models\User::where('id' , auth()->user()->id)->update([
+
+    'last_login' => now()
+]);
+
+@endphp
+
+
 <div class="header no-shadow">
     <div class="container-fluid">
         <div class="row">

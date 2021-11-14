@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Post;
+use Dflydev\DotAccessData\Data;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use JsonException;
 use phpDocumentor\Reflection\Location;
 
 class PostController extends Controller
@@ -48,12 +51,8 @@ class PostController extends Controller
         if($request->hasFile('image')){
             $file = $request->file('image');
 
-            $extension = $file->getClientOriginalExtension();
-            $fileName = 'image_'. time().'.' . $extension;
-            $location = '/images/user_' . Auth::user()->id .'/' ;
-
-            $file->move(public_path().$location ,$fileName);
-            $imageFinal = $location . $fileName;
+            
+            $imageFinal = processImage($file);
 
         }
 
@@ -113,5 +112,54 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         //
+    }
+
+    public function updateLikes(Request $request){
+        $postId= $request->get('post_id') ?? ''; 
+        if($postId){
+            $post= Post::find($postId);
+            $likes= $post->likes;
+            $likes_array= json_decode($likes, true);
+
+            if(in_array(auth()->user()->id, $likes_array)){
+                $likes_array= array_diff($likes_array, [auth()->user()->id]);
+                $post->likes= json_encode($likes_array);
+                $post->save();
+
+                return json_encode([
+                   'success'=> true,
+                   'result'=> -1
+                ]);
+            } else{
+                array_push($likes_array, auth()->user()->id);
+                $post->likes= json_encode($likes_array);
+                $post->save();
+
+                return json_encode([
+                    'success'=> true,
+                    'result'=> 1
+                ]);
+            }
+        } else{
+            return json_encode([
+                'success'=> false
+            ]);
+        }
+    }
+
+    public function saveComment(Request $request){
+
+
+        $comment =$request->get('comment') ?? '';
+        $postId= $request->get('post_id') ?? ''; 
+
+        $data = new Comment();
+        $data->post_id = $postId;
+        $data->user_id = auth()->user()->id;
+        $data->comment = $comment;
+        $data->save();
+
+        Post::find($postId)->increment('comments');
+        return back();
     }
 }
